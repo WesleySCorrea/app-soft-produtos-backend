@@ -3,6 +3,7 @@ package com.app_soft_produtos_backend.application.service;
 import com.app_soft_produtos_backend.application.port.in.ProdutoUseCase;
 import com.app_soft_produtos_backend.application.port.in.dto.request.ItemCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.PedidoCommand;
+import com.app_soft_produtos_backend.application.port.in.dto.response.ProdutoResponse;
 import com.app_soft_produtos_backend.application.port.out.PedidoResultadoEventPort;
 import com.app_soft_produtos_backend.application.port.out.ProdutoRepositoryPort;
 import com.app_soft_produtos_backend.application.port.out.dto.ItemReservado;
@@ -11,6 +12,7 @@ import com.app_soft_produtos_backend.domain.Produto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +59,20 @@ public class ProdutoService implements ProdutoUseCase {
         }
 
         pedidoResultadoEventPort.publicarPedidoResultado(PedidoResultado.reservado(pedido.pedidoId(), reservados));
+    }
+
+    @Override
+    public List<ProdutoResponse> buscarProdutos(String nome) {
+
+        List<Produto> produtos = produtoRepositoryPort.buscarProdutos(nome);
+
+        return produtos.stream().map(produto ->
+                new ProdutoResponse(
+                        produto.getId(),
+                        produto.getNome(),
+                        produto.getDescricao(),
+                        produto.getPreco(),
+                        produto.getEstoque()
+                )).toList();
     }
 }

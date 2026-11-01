@@ -9,4 +9,6 @@ public interface ProdutoRepositoryPort {
     List<Produto> buscarPorIds(List<Long> id);
 
     Produto salvar(Produto produto);
+
+    List<Produto> buscarProdutos(String nome);
 }

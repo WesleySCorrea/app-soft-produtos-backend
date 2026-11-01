@@ -30,4 +30,12 @@ public class ProdutoRepositoryAdapter implements ProdutoRepositoryPort {
 
         return mapper.toDomain(jpaRepository.save(mapper.toEntity(produto)));
     }
+
+    @Override
+    public List<Produto> buscarProdutos(String nome) {
+
+        return jpaRepository.findByNomeContainingIgnoreCase(nome).stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
 }
