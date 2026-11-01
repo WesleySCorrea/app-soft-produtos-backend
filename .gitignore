@@ -44,7 +44,6 @@ HELP.md
 *.iws
 *.iml
 *.ipr
-out/
 
 # Eclipse / STS
 .apt_generated
