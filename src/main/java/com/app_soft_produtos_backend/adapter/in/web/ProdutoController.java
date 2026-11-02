@@ -1,7 +1,9 @@
 package com.app_soft_produtos_backend.adapter.in.web;
 
+import com.app_soft_produtos_backend.adapter.in.web.dto.request.AtualizarProdutoRequest;
 import com.app_soft_produtos_backend.adapter.in.web.dto.request.CriarProdutoRequest;
 import com.app_soft_produtos_backend.application.port.in.ProdutoUseCase;
+import com.app_soft_produtos_backend.application.port.in.dto.request.AtualizarProdutoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.CriarProdutoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.response.ProdutoResponse;
 import org.springframework.http.HttpStatus;
@@ -49,5 +51,24 @@ public class ProdutoController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{produtoId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProdutoResponse> atualizarProduto(
+            @PathVariable Long produtoId,
+            @RequestBody AtualizarProdutoRequest request
+    ) {
+        ProdutoResponse response = produtoUseCase.atualizarProduto(
+                produtoId,
+                new AtualizarProdutoCommand(
+                        request.nome(),
+                        request.descricao(),
+                        request.preco(),
+                        request.estoque(),
+                        request.ativo()
+                )
+        );
+        return ResponseEntity.ok(response);
     }
 }

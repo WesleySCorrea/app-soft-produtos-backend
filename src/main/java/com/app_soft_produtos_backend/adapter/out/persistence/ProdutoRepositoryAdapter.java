@@ -38,4 +38,12 @@ public class ProdutoRepositoryAdapter implements ProdutoRepositoryPort {
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public Produto buscarPorId(Long produtoId) {
+
+        return jpaRepository.findById(produtoId)
+                .map(mapper::toDomain)
+                .orElseThrow(() -> new RuntimeException("Produto de ID " + produtoId + " não encontrado."));
+    }
 }

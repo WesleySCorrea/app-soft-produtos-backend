@@ -1,6 +1,7 @@
 package com.app_soft_produtos_backend.application.service;
 
 import com.app_soft_produtos_backend.application.port.in.ProdutoUseCase;
+import com.app_soft_produtos_backend.application.port.in.dto.request.AtualizarProdutoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.CriarProdutoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.ItemCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.PedidoCommand;
@@ -79,17 +80,40 @@ public class ProdutoService implements ProdutoUseCase {
     }
 
     @Override
-    public ProdutoResponse criarProduto(CriarProdutoCommand pedidoRequest) {
+    public ProdutoResponse criarProduto(CriarProdutoCommand produtoRequest) {
 
         Produto produto = Produto.novoProduto(
-                pedidoRequest.nome(),
-                pedidoRequest.descricao(),
-                pedidoRequest.preco(),
-                pedidoRequest.estoque(),
-                pedidoRequest.ativo()
+                produtoRequest.nome(),
+                produtoRequest.descricao(),
+                produtoRequest.preco(),
+                produtoRequest.estoque(),
+                produtoRequest.ativo()
         );
 
         Produto salvo = produtoRepositoryPort.salvar(produto);
+
+        return new ProdutoResponse(
+                produto.getId(),
+                produto.getNome(),
+                produto.getDescricao(),
+                produto.getPreco(),
+                produto.getEstoque(),
+                produto.isAtivo()
+        );
+    }
+
+    @Override
+    public ProdutoResponse atualizarProduto(Long produtoId, AtualizarProdutoCommand produtoRequest) {
+
+        Produto produto = produtoRepositoryPort.buscarPorId(produtoId);
+
+        produto.setNome(produtoRequest.nome());
+        produto.setDescricao(produtoRequest.descricao());
+        produto.setPreco(produtoRequest.preco());
+        produto.setEstoque(produtoRequest.estoque());
+        produto.setAtivo(produtoRequest.ativo());
+
+        Produto atualizado = produtoRepositoryPort.salvar(produto);
 
         return new ProdutoResponse(
                 produto.getId(),

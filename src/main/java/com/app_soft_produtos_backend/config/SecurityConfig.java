@@ -1,4 +1,4 @@
-package com.app_soft_vendas_backend.config;
+package com.app_soft_produtos_backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
