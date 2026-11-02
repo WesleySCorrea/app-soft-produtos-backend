@@ -1,6 +1,7 @@
 package com.app_soft_produtos_backend.application.service;
 
 import com.app_soft_produtos_backend.application.port.in.ProdutoUseCase;
+import com.app_soft_produtos_backend.application.port.in.dto.request.CriarProdutoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.ItemCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.request.PedidoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.response.ProdutoResponse;
@@ -72,7 +73,31 @@ public class ProdutoService implements ProdutoUseCase {
                         produto.getNome(),
                         produto.getDescricao(),
                         produto.getPreco(),
-                        produto.getEstoque()
+                        produto.getEstoque(),
+                        produto.isAtivo()
                 )).toList();
+    }
+
+    @Override
+    public ProdutoResponse criarProduto(CriarProdutoCommand pedidoRequest) {
+
+        Produto produto = Produto.novoProduto(
+                pedidoRequest.nome(),
+                pedidoRequest.descricao(),
+                pedidoRequest.preco(),
+                pedidoRequest.estoque(),
+                pedidoRequest.ativo()
+        );
+
+        Produto salvo = produtoRepositoryPort.salvar(produto);
+
+        return new ProdutoResponse(
+                produto.getId(),
+                produto.getNome(),
+                produto.getDescricao(),
+                produto.getPreco(),
+                produto.getEstoque(),
+                produto.isAtivo()
+        );
     }
 }

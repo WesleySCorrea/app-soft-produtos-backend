@@ -2,6 +2,7 @@ package com.app_soft_produtos_backend.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Produto {
     private Long id;
@@ -21,6 +22,17 @@ public class Produto {
             throw new IllegalStateException("Estoque insuficiente");
         }
         this.estoque -= quantidade;
+    }
+
+    public static Produto novoProduto(String nome, String descricao, BigDecimal preco, int estoque, boolean ativo) {
+
+        Produto p = new Produto();
+        p.nome = nome;
+        p.descricao = descricao;
+        p.preco = preco;
+        p.estoque = estoque;
+        p.ativo = ativo;
+        return p;
     }
 
     public static Produto reconstruir(Long id, String nome, String descricao, BigDecimal preco, int estoque, boolean ativo, LocalDateTime criadoEm) {

@@ -1,6 +1,8 @@
 package com.app_soft_produtos_backend.adapter.in.web;
 
+import com.app_soft_produtos_backend.adapter.in.web.dto.request.CriarProdutoRequest;
 import com.app_soft_produtos_backend.application.port.in.ProdutoUseCase;
+import com.app_soft_produtos_backend.application.port.in.dto.request.CriarProdutoCommand;
 import com.app_soft_produtos_backend.application.port.in.dto.response.ProdutoResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +30,24 @@ public class ProdutoController {
         List<ProdutoResponse> response = produtoUseCase.buscarProdutos(nome);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProdutoResponse> criarProduto(
+            @RequestBody CriarProdutoRequest request
+    ) {
+
+        ProdutoResponse response = produtoUseCase.criarProduto(
+                new CriarProdutoCommand(
+                        request.nome(),
+                        request.descricao(),
+                        request.preco(),
+                        request.estoque(),
+                        request.ativo()
+                )
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

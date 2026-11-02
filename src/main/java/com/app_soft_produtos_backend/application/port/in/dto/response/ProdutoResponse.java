@@ -7,6 +7,7 @@ public record ProdutoResponse(
     String nome,
     String descricao,
     BigDecimal preco,
-    int estoque
+    int estoque,
+    boolean ativo
 ) {
 }
